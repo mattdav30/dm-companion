@@ -1,0 +1,37 @@
+# DM Lantern
+
+> DM Lantern is a free, browser based campaign manager for tabletop roleplaying games such as Dungeons & Dragons 5e, Pathfinder, Daggerheart and homebrew systems. Dungeon Masters use it to plan sessions, track characters, NPCs, locations, items, story threads, maps and lore, and run game night. Players join a campaign with an invite code and get their own journal and view of what the DM has revealed.
+
+Key facts:
+
+- Price: free to use. Accounts, campaigns and player invites cost nothing.
+- Platform: web app that runs in any modern browser on desktop, tablet and phone. Nothing to install.
+- Accounts: one account per person. A user can run many campaigns as DM and play in other campaigns as a player.
+- Joining: the DM creates single use invite codes; players enter a code to join.
+- Privacy: players' private notes and private map marks are visible only to the player who made them.
+- Backups: the DM can download a full backup of any campaign.
+- Independent tool, unaffiliated with Wizards of the Coast, Paizo or any game publisher.
+
+## Features for Dungeon Masters
+
+- Session planner: sessions built from scenes and beats, including read aloud text, encounters, NPC dialogue and DM notes.
+- Play mode: a run sheet for game night with a live table log, quick lookups, initiative and dice.
+- Records: characters, NPCs, relationships, locations and items, each with DM only secrets.
+- Story: plot threads, player choices and consequences.
+- World map: upload a map, then add markers, routes, regions and labels with per item player visibility.
+- Lore book and society: lore entries revealed to players over time, faction structure and reputation tracking.
+- Toolkit: initiative tracker, dice roller, quick notes, secrets, party inventory, random tables and music links.
+- Session recaps: email the party a recap and next session details.
+
+## Features for players
+
+- Codex of the NPCs, places and handouts the DM has shared.
+- Personal journal with private and party notes.
+- Party tracker for leads, quests and loot.
+- Player profile with a character picture.
+
+## Links
+
+- [Home page](https://__ORIGIN__/): overview, features and FAQ
+- [Create a free account](https://__ORIGIN__/signup)
+- [Privacy policy](https://__ORIGIN__/privacy)

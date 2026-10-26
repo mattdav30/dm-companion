@@ -1,10 +1,11 @@
-/* DM Companion API on Cloudflare Workers + D1. Static app files are served from ./dist. */
+/* API on Cloudflare Workers + D1. Static app files are served from ./dist. */
 import { HttpError, json, fail } from './lib.js'
 import { handleAuth, requireUser } from './auth.js'
 import { handleCampaigns, membership, requireDm } from './campaigns.js'
 import { handleTable, exportCampaign } from './tables.js'
 import { handleRpc } from './rpc.js'
 import { handleFiles } from './files.js'
+import { handleSite, canonicalRedirect } from './site.js'
 
 const SAFE = new Set(['GET', 'HEAD', 'OPTIONS'])
 
@@ -62,6 +63,8 @@ async function api(request, env, url) {
 export default {
   async fetch(request, env) {
     const url = new URL(request.url)
+    const moved = canonicalRedirect(request, env, url)
+    if (moved) return moved
     if (url.pathname.startsWith('/api/')) {
       try {
         return await api(request, env, url)
@@ -71,6 +74,8 @@ export default {
         return json({ error: 'Something went wrong on the server. Try again in a moment.' }, 500)
       }
     }
+    const site = await handleSite(request, env, url)
+    if (site) return site
     return env.ASSETS.fetch(request)
   },
 }

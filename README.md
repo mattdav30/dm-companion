@@ -1,4 +1,4 @@
-# DM Companion
+# DM Lantern
 
 A campaign companion for tabletop games. Anyone can sign up, run their own campaigns as the Dungeon Master and join other people's campaigns as a player with an invite code. One account works for every campaign.
 
@@ -8,6 +8,7 @@ The whole app runs on Cloudflare.
 
 | Part | Where |
 | --- | --- |
+| Public home page and privacy page | Static HTML in `public/`, served at `/` and `/privacy` to signed out visitors and search engines |
 | Web app (React, built with Vite) | Served as static files by the Worker from `dist` |
 | API | Cloudflare Worker in `worker/` at `/api/*` |
 | Data, accounts and images | Cloudflare D1 database `dm-companion` |
@@ -33,6 +34,19 @@ Database tables are in `migrations/`. Campaign content (characters, NPCs, sessio
    * in the Cloudflare dashboard under Workers and Pages, Create, Import a repository, pick this repo, set the build command to `npm run build` and the deploy command to `npx wrangler deploy`. Every push to `main` then deploys.
 
 The app will be live at `https://dm-companion.<your-subdomain>.workers.dev`. A custom domain can be added in the Worker's settings.
+
+## Search, social and AI search
+
+* `/` shows the public home page to signed out visitors and crawlers, and the campaign list to signed in users. App pages carry `noindex`.
+* `robots.txt`, `sitemap.xml` and `llms.txt` are built by the Worker from the live domain (`worker/site.js`). AI crawlers are allowed on public pages.
+* The home page carries Open Graph and Twitter tags, a 1200 by 630 share image and JSON-LD for the organisation, website, web app and FAQ.
+* Successful sign ups push `{ event: 'sign_up' }` to `window.dataLayer`, ready for Google Tag Manager or a Google Ads conversion.
+* The product name lives in `src/brand.js` and in the static files in `public/`.
+
+After a custom domain is attached:
+
+1. Uncomment `vars.CANONICAL_HOST` in `wrangler.jsonc` and set it to the domain. The workers.dev address then redirects there.
+2. Verify the domain in Google Search Console and Bing Webmaster Tools, and submit `/sitemap.xml` to both.
 
 ## Local development
 

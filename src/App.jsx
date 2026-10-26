@@ -12,6 +12,7 @@ import { Sidebar, Topbar, SearchBox, SignOut, useCloseOnNav, Profile } from './u
 import { ComfortButton, BackupButton, NoteButton, Notifications, useComfort, GearMenu, CampaignChip, TextSize } from './ui/TopTools.jsx'
 import { Emblem, Portrait } from './ui/art.jsx'
 import { ENTITIES } from './entities.js'
+import { BRAND } from './brand.js'
 const Dashboard = lazy(() => import('./dm/Dashboard.jsx'))
 const Records = lazy(() => import('./dm/Records.jsx'))
 const Tabbed = lazy(() => import('./dm/Records.jsx').then((m) => ({ default: m.Tabbed })))
@@ -101,13 +102,13 @@ function Home({ user, setUser }) {
   const [account, setAccount] = useState(false)
   const load = useCallback(() => api.get('/campaigns').then((r) => setList(r.campaigns)).catch((e) => { toast(errorText(e), 'error'); setList([]) }), [toast])
   useEffect(() => { load() }, [load])
-  useEffect(() => { document.title = 'DM Companion' }, [])
+  useEffect(() => { document.title = `Your campaigns · ${BRAND.name}` }, [])
   const running = (list || []).filter((c) => c.role === 'dm')
   const playing = (list || []).filter((c) => c.role !== 'dm')
   return (
     <div className="home">
       <header className="home-top">
-        <div className="home-brand"><Emblem /><div><strong>DM Companion</strong><small>Campaigns for the table</small></div></div>
+        <div className="home-brand"><Emblem /><div><strong>{BRAND.name}</strong><small>{BRAND.tagline}</small></div></div>
         <div className="spacer" />
         <button className="home-user" onClick={() => setAccount(true)} title="Account">
           <Portrait name={user.name} size="sm" />
@@ -269,7 +270,7 @@ function CampaignRoot({ cid, user }) {
   // Point the data layer at this campaign before any page asks for rows.
   useMemo(() => setCampaignId(cid), [cid])
   useEffect(() => { load() }, [load])
-  useEffect(() => { if (state?.campaign) document.title = `${state.campaign.name} · DM Companion` }, [state?.campaign])
+  useEffect(() => { if (state?.campaign) document.title = `${state.campaign.name} · ${BRAND.name}` }, [state?.campaign])
   if (!state) return <Splash text="Opening the campaign…" />
   if (state.error) return (
     <div className="splash">
@@ -455,7 +456,7 @@ function AuthFrame({ children }) {
       </div>
       <div className="login-form">
         <div className="login-card">
-          <div className="home-brand" style={{ marginBottom: 26 }}><Emblem /><div><strong>DM Companion</strong><small>Campaigns for the table</small></div></div>
+          <div className="home-brand" style={{ marginBottom: 26 }}><Emblem /><div><strong>{BRAND.name}</strong><small>{BRAND.tagline}</small></div></div>
           {children}
         </div>
       </div>
@@ -465,7 +466,8 @@ function AuthFrame({ children }) {
 
 function Login({ onSignedIn }) {
   const toast = useToast()
-  const [mode, setMode] = useState('in')
+  const [mode, setMode] = useState(() => (window.location.pathname === '/signup' ? 'up' : 'in'))
+  useEffect(() => { document.title = `${mode === 'up' ? 'Create your account' : 'Sign in'} · ${BRAND.name}` }, [mode])
   const [v, setV] = useState({ name: '', email: '', password: '' })
   const [busy, setBusy] = useState(false)
   async function submit(e) {
@@ -473,6 +475,9 @@ function Login({ onSignedIn }) {
     setBusy(true)
     try {
       const r = mode === 'in' ? await api.post('/auth/login', { email: v.email, password: v.password }) : await api.post('/auth/signup', v)
+      // Ready for Google Tag Manager or Ads conversion tracking when a tag is added.
+      if (mode === 'up') (window.dataLayer = window.dataLayer || []).push({ event: 'sign_up', method: 'email' })
+      if (/^\/(signin|signup|login)$/.test(window.location.pathname)) window.history.replaceState(null, '', '/')
       onSignedIn(r.user)
     } catch (err) {
       toast(errorText(err), 'error')
@@ -485,7 +490,7 @@ function Login({ onSignedIn }) {
     <AuthFrame>
       <h2 className="auth-title">{mode === 'in' ? 'Sign in' : mode === 'up' ? 'Create your account' : 'Forgot your password?'}</h2>
       {mode === 'reset' ? (
-        <p className="muted">Password reset by email is not set up yet. Ask the person who runs this site to reset it for you, or create a new account.</p>
+        <p className="muted">Password reset by email is coming soon. For now, email <a href={`mailto:${BRAND.email}`}>{BRAND.email}</a> from the address on your account and we will help you get back in.</p>
       ) : (
         <form onSubmit={submit} className="stack" style={{ gap: 14 }}>
           {mode === 'up' && <div className="field"><label htmlFor="su-name">Your name</label><input id="su-name" className="input" autoComplete="name" value={v.name} onChange={set('name')} required /></div>}

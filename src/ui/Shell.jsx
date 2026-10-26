@@ -1,9 +1,10 @@
+import { BRAND } from '../brand.js'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { NavLink, useLocation, useNavigate } from '../lib/router.jsx'
 import { Search, Menu, LogOut, Eye, Skull } from 'lucide-react'
 import { Emblem } from './art.jsx'
 
-export function Sidebar({ items, open, onClose, footer, title = 'DM Companion', subtitle = '' }) {
+export function Sidebar({ items, open, onClose, footer, title = BRAND.name, subtitle = '' }) {
   return (
     <>
       {open && <div className="scrim" onClick={onClose} />}
