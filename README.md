@@ -22,7 +22,7 @@ Database tables are in `migrations/`. Campaign content (characters, NPCs, sessio
 
 ## First deploy
 
-1. Apply the database tables once:
+1. The database tables are already applied to the `dm-companion` D1 database. For a fresh database, apply them once:
    ```
    npm install
    npx wrangler login
