@@ -1,0 +1,24 @@
+{
+  "name": "dm-companion",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "api": "wrangler dev",
+    "build": "vite build",
+    "db:migrate": "wrangler d1 migrations apply dm-companion --remote",
+    "db:migrate:local": "wrangler d1 migrations apply dm-companion --local",
+    "deploy": "vite build && wrangler deploy"
+  },
+  "dependencies": {
+    "lucide-react": "^1.47.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.7.0",
+    "vite": "^5.4.21",
+    "wrangler": "^4.40.0"
+  }
+}
